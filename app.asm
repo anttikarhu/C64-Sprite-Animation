@@ -1,0 +1,6 @@
+; ALLOWS ONE TO START THE APPLICATION WITH RUN
+; SYS 2064
+*=$0801 
+         BYTE $0C, $8, $0A, $00, $9E, $20, $32, $30, $36, $34, $00, $00, $00, $00, $00
+
+LOOP    JMP LOOP
