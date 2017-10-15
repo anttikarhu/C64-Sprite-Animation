@@ -24,7 +24,6 @@ FRAME0_DATA     = $2000
 COLOR_BLACK             = #0
 COLOR_LIGHT_GRAY        = #15
 
-
 INIT    JSR CLEAR
 
         ; ENABLE SPRITES
@@ -51,7 +50,7 @@ INIT    JSR CLEAR
         LDY #100
         STY SPR0_Y
 
-        ; SET SPRITE POINTER
+        ; SET INITIAL SPRITE POINTER
         LDA FRAME0_ADDR
         STA SPR0_PTR
 
@@ -60,14 +59,14 @@ INIT    JSR CLEAR
 LOAD    LDA SPRITES,X
         STA FRAME0_DATA,X
         INX
-        CPX #255
+        CPX #255 ; 64 * 4 BYTES FOR 4 FRAMES
         BNE LOAD
 
-       
-LOOP    
-        LDX #255
-        LDY #50
 
+; MAIN LOOP       
+LOOP
+        LDX #255 ; WAIT A BIT
+        LDY #63
 WAIT    DEX
         BNE WAIT
         DEY
@@ -75,17 +74,19 @@ WAIT    DEX
 
         ; GET CURRENT FRAME POINTER
         LDX SPR0_PTR
-        CPX #$83
+        CPX #$83 ; IS THE LAST FRAME?
         BNE NEXT
 
-FIRST   LDX FRAME0_ADDR
+FIRST   LDX FRAME0_ADDR ; CHANGE TO FIRST IF IT WAS
         STX SPR0_PTR
         JMP LOOP
 
-NEXT    INX
+NEXT    INX ; IF NOT, SHOW NEXT FRAME
         STX SPR0_PTR
         JMP LOOP
 
+
+; SPRITE DATA
 SPRITES BYTE 0,168,0 ;FRAME 0
         BYTE 0,168,0
         BYTE 0,168,0
